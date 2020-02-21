@@ -1,6 +1,6 @@
 {
-  "name": "netsells-logger-node",
-  "version": "1.0.0",
+  "name": "@netsells/logger",
+  "version": "0.0.1",
   "description": "",
   "main": "index.js",
   "dependencies": {
