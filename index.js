@@ -25,7 +25,7 @@ class NetsellsLogger {
     this.fileOpts = {
       errorEventName:'error',
       logDirectory: 'logs',
-      fileNamePattern: 'node-<DATE>.log',
+      fileNamePattern: 'node-json-<DATE>.log',
       dateFormat: 'YYYY-MM-DD',
       levels: this.levels,
     };
