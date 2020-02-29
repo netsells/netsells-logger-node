@@ -14,9 +14,9 @@ const NetsellsLogger = require('netsells-logger-node');
 const logger = new NetsellsLogger("Project Name Here");
 
 // Only use one of the below options
-logger
-    .useConsoleLogger() // Output logs to the console (for use in docker)
-    .useFileLogger(); // Output logs to a rotating log file in logs/
+logger.useFileLogger({
+    logDirectory: '/var/logs', // Specify the log directory for docker, default is 'logs' in the project dir
+});
 
 // Optional setting of component and sub-component
 // Defaults are shown in example below
