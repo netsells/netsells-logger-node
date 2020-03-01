@@ -54,11 +54,15 @@ class NetsellsLogger {
   }
 
   setFileOpts(options) {
-    this.fileOpts = {...options, ...this.fileOpts};
+    this.fileOpts = {...this.fileOpts, ...options};
+
+    return this;
   }
 
   setConsoleOpts(options) {
-    this.consoleOpts = {...options, ...this.consoleOpts};
+    this.consoleOpts = {...this.consoleOpts, ...options};
+
+    return this;
   }
 
   useConsoleLogger() {
