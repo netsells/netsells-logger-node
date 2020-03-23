@@ -3,6 +3,7 @@
 A log formatter for use with Node. 
 
 ## TODO:
+
 * Generate and persist a request id
 * Determine location and set client IP or console in uri
 * Catch and handle exceptions according to the [NS standards](https://netsells.atlassian.net/wiki/spaces/NS/pages/1014136840/Application+Logging)
@@ -34,6 +35,18 @@ logger.info('A info message here.');
 logger.warn('A warn message here.');
 logger.error('A error message here.');
 logger.critical('A critical message here.');
+```
 
-// Logs can also be written if 
+Logs can also be written in an object format to pass through all options in the format outlined in the [Logging Docs](https://netsells.atlassian.net/wiki/spaces/NS/pages/1014136840/Application+Logging#The-log-format).
+
+```js
+logger.error({
+    message: 'A error message here.',
+    request: {
+        id: '',
+        client_ip: '',
+        uri: '',
+    },
+    // Etc
+});
 ```

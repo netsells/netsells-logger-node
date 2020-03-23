@@ -103,13 +103,15 @@ class NetsellsLogger {
 
             if (typeof data === 'string') {
                 data = {
-                    msg: entry,
+                    message: entry,
                 };
             }
 
             const apdr = thisArg || appender;
 
-            const fields = {};
+            const fields = {
+                ...data,
+            };
 
             fields.app = {
                 hostname: os.hostname(),
@@ -132,7 +134,7 @@ class NetsellsLogger {
             };
 
             fields.level = apdr.formatLevel(entry.level);
-            fields.message = apdr.formatMessage(data.msg);
+            fields.message = apdr.formatMessage(data.message);
 
             return fields;
         };
