@@ -4,10 +4,11 @@
     "description": "",
     "main": "index.js",
     "dependencies": {
-        "@netsells/eslint-config": "^3.7.4",
         "simple-node-logger": "^18.12.24"
     },
-    "devDependencies": {},
+    "devDependencies": {
+        "@netsells/eslint-config": "^3.7.4"
+    },
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
     },
