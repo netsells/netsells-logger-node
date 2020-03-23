@@ -1,19 +1,22 @@
 {
-  "name": "@netsells/netsells-logger-node",
-  "version": "0.3.0",
-  "description": "",
-  "main": "index.js",
-  "dependencies": {
-    "@netsells/eslint-config": "^3.7.4",
-    "simple-node-logger": "^18.12.24"
-  },
-  "devDependencies": {},
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
-  },
-  "author": "",
-  "license": "ISC"
+    "name": "@netsells/netsells-logger-node",
+    "version": "0.3.0",
+    "description": "",
+    "main": "index.js",
+    "dependencies": {
+        "@netsells/eslint-config": "^3.7.4",
+        "simple-node-logger": "^18.12.24"
+    },
+    "devDependencies": {},
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "publishConfig": {
+        "registry": "https://npm.pkg.github.com/"
+    },
+    "files": [
+        "index.js"
+    ],
+    "author": "",
+    "license": "ISC"
 }
