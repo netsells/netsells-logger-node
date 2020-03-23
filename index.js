@@ -4,150 +4,163 @@ const SimpleLogger = require('simple-node-logger');
 const os = require('os');
 
 class NetsellsLogger {
-   /**
-   * @constructor
-   */
-  constructor(projectName) {
+    /**
+     * @constructor
+     */
+    constructor(projectName) {
+        if (!projectName) {
+            throw new Error('Project name is required for the Netsells Logger.');
+        }
 
-    if (!projectName) {
-      throw new Error("Project name is required for the Netsells Logger.");
+        this.manager = new SimpleLogger();
+        this.loggerType = 'file';
+
+        this.project = projectName;
+        this.component = 'frontend';
+        this.subComponent = 'node';
+        this.environment = 'local';
+
+        this.levels = ['debug', 'info', 'warn', 'error', 'critical'];
+
+        this.fileOpts = {
+            errorEventName: 'error',
+            logDirectory: 'logs',
+            fileNamePattern: 'node-json-<DATE>.log',
+            dateFormat: 'YYYY-MM-DD',
+            levels: this.levels,
+        };
+
+        this.consoleOpts = {
+            levels: this.levels,
+        };
     }
 
-    this.manager = new SimpleLogger();
-    this.loggerType = 'file';
+    setProjectName(projectName) {
+        this.project = projectName;
 
-    this.project = projectName;
-    this.component = 'frontend';
-    this.subComponent = 'node';
-
-    this.levels = ['debug', 'info', 'warn', 'error', 'critical'];
-
-    this.fileOpts = {
-      errorEventName:'error',
-      logDirectory: 'logs',
-      fileNamePattern: 'node-json-<DATE>.log',
-      dateFormat: 'YYYY-MM-DD',
-      levels: this.levels,
-    };
-
-    this.consoleOpts = {
-      levels: this.levels,
-    };
-  }
-
-  setProjectName(projectName) {
-    this.project = projectName;
-
-    return this;
-  }
-
-  setComponent(component) {
-    this.component = component;
-
-    return this;
-  }
-
-  setSubComponent(subComponent) {
-    this.subComponent = subComponent;
-
-    return this;
-  }
-
-  setFileOpts(options) {
-    this.fileOpts = {...this.fileOpts, ...options};
-
-    return this;
-  }
-
-  setConsoleOpts(options) {
-    this.consoleOpts = {...this.consoleOpts, ...options};
-
-    return this;
-  }
-
-  useConsoleLogger() {
-    this.loggerType = 'console';
-
-    return this;
-  }
-
-  useFileLogger() {
-    this.loggerType = 'file';
-
-    return this;
-  }
-
-  run() {
-    let appender;
-
-    if (this.loggerType == 'file') {
-      appender = this.manager.createRollingFileAppender(this.fileOpts);
-    } else {
-      appender = this.manager.createConsoleAppender(this.consoleOpts);
+        return this;
     }
 
-    appender.formatter = function (entry) {
-      let fields = appender.formatEntry(entry);
-    
-      return JSON.stringify(fields) + '\n';
-    };
+    setComponent(component) {
+        this.component = component;
 
-    let that = this;
+        return this;
+    }
 
-    appender.formatEntry = function (entry, thisArg) {
-      const apdr = thisArg || appender;
-  
-      const fields = {};
-  
-      fields.app = {
-        hostname: os.hostname(),
-        project: that.project,
-        component: that.component,
-        "sub-component": that.subComponent,
-      };
+    setSubComponent(subComponent) {
+        this.subComponent = subComponent;
 
-      fields.event = {
-        created: new Date(entry.ts).toISOString(),
-        type: 'log',
-      };
+        return this;
+    }
 
-      fields.request = {
-        id: null, // TODO:
-        client_id: null, // TODO
-        uri: 'console', // TODO
-      };
+    setEnvironment(environment) {
+        this.environment = environment;
 
-      fields.level = apdr.formatLevel(entry.level);
-      fields.message = apdr.formatMessage(entry.msg);
-  
-      return fields;
-    };
+        return this;
+    }
 
-    this.logger = this.manager.createLogger({
-      levels: this.levels,
-    });
-  }
+    setFileOpts(options) {
+        this.fileOpts = { ...this.fileOpts, ...options };
 
-  critical(message) {
-    this.logger.log("critical", message);
-  }
+        return this;
+    }
 
-  error(message) {
-    this.logger.log("error", message);
-  }
+    setConsoleOpts(options) {
+        this.consoleOpts = { ...this.consoleOpts, ...options };
 
-  warn(message) {
-    this.logger.log("warn", message);
-  }
+        return this;
+    }
 
-  info(message) {
-    this.logger.log("info", message);
-  }
+    useConsoleLogger() {
+        this.loggerType = 'console';
 
-  debug(message) {
-    this.logger.log("debug", message);
-  }
+        return this;
+    }
 
+    useFileLogger() {
+        this.loggerType = 'file';
+
+        return this;
+    }
+
+    run() {
+        let appender;
+
+        if (this.loggerType === 'file') {
+            appender = this.manager.createRollingFileAppender(this.fileOpts);
+        } else {
+            appender = this.manager.createConsoleAppender(this.consoleOpts);
+        }
+
+        appender.formatter = function(entry) {
+            const fields = appender.formatEntry(entry);
+
+            return JSON.stringify(fields) + '\n';
+        };
+
+        appender.formatEntry = (entry, thisArg) => {
+            let data = entry.msg;
+
+            if (typeof data === 'string') {
+                data = {
+                    msg: entry,
+                };
+            }
+
+            const apdr = thisArg || appender;
+
+            const fields = {};
+
+            fields.app = {
+                hostname: os.hostname(),
+                project: this.project,
+                component: this.component,
+                'sub-component': this.subComponent,
+                environment: this.environment,
+            };
+
+            fields.event = {
+                created: new Date(entry.ts).toISOString(),
+                type: 'log',
+            };
+
+            fields.request = {
+                id: null, // TODO:
+                client_id: null, // TODO
+                uri: 'console', // TODO
+                ...data.request || {},
+            };
+
+            fields.level = apdr.formatLevel(entry.level);
+            fields.message = apdr.formatMessage(data.msg);
+
+            return fields;
+        };
+
+        this.logger = this.manager.createLogger({
+            levels: this.levels,
+        });
+    }
+
+    critical(data) {
+        this.logger.log('critical', data);
+    }
+
+    error(data) {
+        this.logger.log('error', data);
+    }
+
+    warn(data) {
+        this.logger.log('warn', data);
+    }
+
+    info(data) {
+        this.logger.log('info', data);
+    }
+
+    debug(data) {
+        this.logger.log('debug', data);
+    }
 }
 
 module.exports = NetsellsLogger;

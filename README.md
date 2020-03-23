@@ -9,9 +9,10 @@ A log formatter for use with Node.
 * Add support for context
 
 ## Usage:
-```javascript
+
+```js
 const NetsellsLogger = require('netsells-logger-node');
-const logger = new NetsellsLogger("Project Name Here");
+const logger = new NetsellsLogger('Project Name Here');
 
 // Only use one of the below options
 logger.useFileLogger({
@@ -20,7 +21,7 @@ logger.useFileLogger({
 
 // Optional setting of component and sub-component
 // Defaults are shown in example below
-logger.
+logger
     .setComponent('frontend')
     .setSubComponent('node');
 
@@ -28,9 +29,11 @@ logger.
 logger.run();
 
 // The different types of logs below.
-logger.debug("A debug message here.");
-logger.info("A info message here.");
-logger.warn("A warn message here.");
-logger.error("A error message here.");
-logger.critical("A critical message here.");
+logger.debug('A debug message here.');
+logger.info('A info message here.');
+logger.warn('A warn message here.');
+logger.error('A error message here.');
+logger.critical('A critical message here.');
+
+// Logs can also be written if 
 ```
