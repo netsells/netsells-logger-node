@@ -102,8 +102,11 @@ class NetsellsLogger {
             let data = entry.msg;
 
             if (typeof data === 'string') {
+                const { message, ...rest } = entry;
+
                 data = {
                     message: entry,
+                    ...rest,
                 };
             }
 
@@ -127,9 +130,9 @@ class NetsellsLogger {
             };
 
             fields.request = {
-                id: null, // TODO:
-                client_id: null, // TODO
-                uri: 'console', // TODO
+                id: null,
+                client_ip: null,
+                uri: 'console',
                 ...data.request || {},
             };
 

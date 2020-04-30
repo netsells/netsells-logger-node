@@ -1,13 +1,6 @@
 # Netsells Logger - Node
 
-A log formatter for use with Node. 
-
-## TODO:
-
-* Generate and persist a request id
-* Determine location and set client IP or console in uri
-* Catch and handle exceptions according to the [NS standards](https://netsells.atlassian.net/wiki/spaces/NS/pages/1014136840/Application+Logging)
-* Add support for context
+A log formatter for use with Node.
 
 ## Usage:
 
